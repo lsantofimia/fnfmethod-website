@@ -2,12 +2,12 @@
   "redirects": [
     {
       "source": "/app",
-      "destination": "https://flipcore-app-lsantofimias-projects.vercel.app",
+      "destination": "https://flipcore.fnfmethod.com",
       "permanent": false
     },
     {
       "source": "/app/:path*",
-      "destination": "https://flipcore-app-lsantofimias-projects.vercel.app/:path*",
+      "destination": "https://flipcore.fnfmethod.com/:path*",
       "permanent": false
     }
   ]
