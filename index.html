@@ -1,0 +1,1039 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FnF Method — Structured Fix &amp; Flip Investments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Open+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ---------- Brand Tokens ---------- */
+:root{
+  --primary: #E46400;         /* brand primary accent */
+  --accent-2: #FFA36E;        /* secondary peach */
+  --accent-3: #FCC8A7;        /* soft peach */
+  --ink: #192248;             /* deep navy */
+  --text: #333F70;            /* body navy */
+  --muted: #7b83a8;
+  --muted-2: #aab0c9;
+  --bg: #FBF6F1;              /* warm cream page bg */
+  --bg-2: #FFFFFF;            /* card bg */
+  --stroke: #E6DED3;
+  --stroke-2: #efe8de;
+  --ok: #3f8d5a;
+
+  --font-head: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --radius: 18px;
+  --container: 1240px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--font-body);font-weight:400;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth}
+body{overflow-x:hidden;line-height:1.55;font-size:16px}
+a{color:inherit;text-decoration:none}
+img,video,svg{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ---------- Background video (scroll-scrubbed, sits behind sections that opt-in) ---------- */
+.bg-stage{
+  position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg);pointer-events:none;
+}
+.bg-stage video{
+  position:absolute;left:50%;top:50%;
+  min-width:105%;min-height:105%;width:auto;height:auto;
+  transform:translate(-50%,-50%) scale(1.05);
+  object-fit:cover;opacity:.65;filter:saturate(.9) contrast(1.02);
+  transition:opacity .6s ease;
+}
+.bg-stage video.hidden{opacity:0}
+/* Animated CSS fallback: slowly drifting warm gradient with subtle grain */
+.bg-fallback{
+  position:absolute;inset:-8%;
+  background:
+    radial-gradient(60% 50% at 20% 30%, rgba(255,163,110,.55), transparent 60%),
+    radial-gradient(55% 45% at 80% 20%, rgba(252,200,167,.55), transparent 65%),
+    radial-gradient(70% 60% at 60% 90%, rgba(228,100,0,.35), transparent 70%),
+    radial-gradient(50% 60% at 15% 85%, rgba(25,34,72,.25), transparent 70%),
+    linear-gradient(180deg, #fbf6f1 0%, #f7ecdd 60%, #f2e0c9 100%);
+  filter:blur(8px) saturate(1.05);
+  animation: bgDrift 32s ease-in-out infinite alternate;
+  opacity:1;
+  transition:opacity .8s ease;
+}
+.bg-fallback.hidden{opacity:0}
+@keyframes bgDrift{
+  0%{transform:translate3d(0,0,0) scale(1.02)}
+  50%{transform:translate3d(-2%,-1%,0) scale(1.05)}
+  100%{transform:translate3d(1.5%,2%,0) scale(1.03)}
+}
+/* warm tint overlay on video to blend w/ cream palette */
+.bg-stage::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg, rgba(251,246,241,.55) 0%, rgba(251,246,241,.35) 40%, rgba(251,246,241,.6) 100%),
+    linear-gradient(180deg, rgba(228,100,0,.06), rgba(25,34,72,.06));
+}
+
+/* Sections that should show the video behind */
+.has-bg{position:relative;z-index:1}
+.has-bg::before{display:none}
+
+/* Sections that cover the bg with slightly translucent cream (intercut) */
+.solid{position:relative;z-index:2;background:rgba(251,246,241,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+/* Sections that cover with the white card tone, also slightly translucent */
+.solid-white{position:relative;z-index:2;background:rgba(255,255,255,0.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+
+/* ---------- Layout ---------- */
+.wrap{max-width:var(--container);margin:0 auto;padding:0 32px;position:relative;z-index:2}
+@media (max-width:640px){ .wrap{padding:0 20px} }
+
+/* ---------- Header ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  padding:18px 0;transition:background .35s ease, backdrop-filter .35s ease, border-color .35s ease;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(251,246,241,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--stroke-2);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;color:var(--ink)}
+.brand-mark{height:44px;display:grid;place-items:center;color:var(--primary)}
+.brand-mark img{height:44px;width:auto;display:block}
+.brand-word{font-family:var(--font-head);font-weight:700;font-size:15px;letter-spacing:-.01em;color:var(--ink);line-height:1}
+.brand-word small{display:block;font-family:var(--font-body);font-weight:500;font-size:10px;letter-spacing:.3em;color:var(--primary);text-transform:uppercase;margin-top:3px}
+
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-links a{
+  font-size:13px;color:var(--text);padding:9px 14px;border-radius:999px;transition:color .2s,background .2s;font-weight:500;
+}
+.nav-links a:hover{color:var(--primary);background:rgba(228,100,0,.06)}
+.nav-right{display:flex;align-items:center;gap:14px}
+
+.lang-switch{display:inline-flex;align-items:center;border:1px solid var(--stroke);border-radius:999px;padding:3px;background:var(--bg-2)}
+.lang-switch button{
+  font-size:11px;letter-spacing:.14em;padding:6px 10px;border-radius:999px;color:var(--muted);text-transform:uppercase;
+  transition:color .2s,background .2s;font-weight:600;font-family:var(--font-body);
+}
+.lang-switch button.active{background:var(--ink);color:#fff}
+
+.cta{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:13px;padding:12px 20px;border-radius:999px;font-weight:600;
+  border:1px solid var(--ink);color:var(--ink);background:transparent;
+  transition:all .2s;
+}
+.cta:hover{background:var(--ink);color:#fff}
+.cta.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.cta.primary:hover{background:#c85800;border-color:#c85800}
+.cta .arrow{display:inline-block;transition:transform .2s}
+.cta:hover .arrow{transform:translate(2px,-2px)}
+
+.cta.ghost{padding:10px 16px;font-size:12px}
+.cta.ghost:hover{background:var(--ink);color:#fff}
+@media (max-width: 900px){
+  .nav-links{display:none}
+  .nav-right .cta.primary{display:none}
+  .nav-right .cta.ghost{display:none}
+}
+
+/* ---------- Section shells ---------- */
+section{position:relative;padding:140px 0}
+@media (max-width: 720px){ section{padding:96px 0} }
+
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:11px;text-transform:uppercase;letter-spacing:.24em;color:var(--primary);
+  display:inline-flex;align-items:center;gap:12px;font-weight:500;
+}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--primary);display:inline-block}
+
+h1,h2,h3,h4{margin:0;font-family:var(--font-head);font-weight:700;color:var(--ink);letter-spacing:-.02em}
+h1{font-size:clamp(42px,6.2vw,84px);line-height:1.02;font-weight:700}
+h2{font-size:clamp(30px,3.8vw,52px);line-height:1.08;font-weight:700}
+h3{font-size:20px;font-weight:600;letter-spacing:-.005em}
+p{color:var(--text);font-size:16px;line-height:1.65;max-width:60ch}
+.hairline{height:1px;background:var(--stroke);border:0;margin:0}
+
+.accent{color:var(--primary)}
+.ink{color:var(--ink)}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+/* If page loads with reveal already visible (initial load), skip transition */
+.reveal.in-initial{opacity:1;transform:none;transition:none}
+.reveal-delay-1{transition-delay:.08s}
+.reveal-delay-2{transition-delay:.16s}
+.reveal-delay-3{transition-delay:.24s}
+
+/* ---------- HERO (full-bleed, video behind) ---------- */
+.hero{min-height:100vh;display:flex;align-items:center;padding:180px 0 120px;position:relative}
+.hero .wrap{max-width:1320px}
+.hero-eyebrow-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:40px}
+.loc-pill{
+  font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);
+  display:inline-flex;align-items:center;gap:8px;padding:7px 12px;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(8px);
+  border:1px solid var(--stroke);border-radius:999px;
+}
+.loc-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 4px rgba(228,100,0,.18);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(228,100,0,.18)}50%{box-shadow:0 0 0 8px rgba(228,100,0,.05)}}
+
+.hero h1{max-width:none;margin:0 0 28px}
+.hero h1 .line2{display:block;color:var(--primary);font-style:normal;white-space:nowrap;font-size:clamp(32px,5.2vw,72px)}
+.hero .sub{font-size:18px;max-width:52ch;margin:0 0 44px;color:var(--ink);font-weight:400}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:64px}
+
+.hero-metrics{display:grid;grid-template-columns:repeat(3,auto);gap:48px;border-top:1px solid var(--stroke);padding-top:36px;max-width:640px}
+@media (max-width:640px){ .hero-metrics{grid-template-columns:repeat(3,1fr);gap:20px} }
+.metric .num{font-family:var(--font-head);font-weight:700;font-size:44px;line-height:1;color:var(--ink);letter-spacing:-.02em}
+.metric .num sup{font-size:18px;vertical-align:super;color:var(--primary);margin-left:2px}
+.metric .lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:10px;display:block}
+
+.scroll-cue{
+  position:absolute;left:50%;bottom:28px;transform:translateX(-50%);
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.scroll-cue .line{width:1px;height:36px;background:linear-gradient(180deg, var(--ink), transparent);animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(.3);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(.3);transform-origin:bottom}}
+
+/* ---------- Section head util ---------- */
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:72px;flex-wrap:wrap}
+.sec-head .title{max-width:18ch}
+.sec-head .lead{max-width:44ch;color:var(--text)}
+
+/* ---------- How it works ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--stroke);border-bottom:1px solid var(--stroke)}
+@media (max-width:980px){ .steps{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){ .steps{grid-template-columns:1fr} }
+.step{padding:36px 28px 44px;border-right:1px solid var(--stroke);position:relative;transition:background .3s}
+.step:last-child{border-right:0}
+.step:hover{background:var(--accent-3)}
+.step .idx{font-family:var(--font-mono);font-size:11px;color:var(--primary);letter-spacing:.18em;font-weight:500}
+.step h3{margin:20px 0 12px;font-family:var(--font-head);font-size:22px;font-weight:600;color:var(--ink)}
+.step p{font-size:14.5px;color:var(--text)}
+.step .spark{position:absolute;top:-1px;left:0;width:28px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform .8s}
+.step.in .spark{transform:scaleX(1)}
+
+/* ---------- Why it works (on video background, glass cards) ---------- */
+.why{display:grid;grid-template-columns:1.1fr .9fr;gap:72px;align-items:start}
+@media (max-width:900px){ .why{grid-template-columns:1fr} }
+.why-intro h2{color:var(--ink)}
+.why-list{list-style:none;padding:0;margin:40px 0 0;border-top:1px solid var(--stroke)}
+.why-list li{display:grid;grid-template-columns:60px 1fr auto;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--stroke)}
+.why-list .n{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:.2em}
+.why-list .t{font-size:16px;color:var(--ink);font-weight:500}
+.why-list .v{font-family:var(--font-head);font-weight:600;font-size:18px;color:var(--primary);white-space:nowrap}
+
+.glass{
+  border:1px solid var(--stroke);border-radius:var(--radius);padding:36px;
+  background:rgba(255,255,255,.75);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  display:flex;flex-direction:column;gap:18px;
+  box-shadow:0 20px 60px rgba(25,34,72,.08);
+}
+.glass h3{font-family:var(--font-head);font-size:24px;font-weight:600;color:var(--ink)}
+.glass .sub{font-size:13px;color:var(--muted);margin:0}
+.why-diagram{margin-top:18px}
+.bar-row{display:grid;grid-template-columns:72px 1fr 72px;align-items:center;gap:14px;margin-bottom:12px}
+.bar-row.arv{margin-top:6px;padding-top:14px;border-top:1px dashed var(--stroke)}
+.bar-label{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.22em;color:var(--muted);font-weight:500}
+.bar-track{position:relative;height:18px;background:rgba(25,34,72,.06);border-radius:3px;overflow:hidden}
+.bar-fill{position:absolute;inset:0;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,#FFA36E 0%,#E46400 100%);border-radius:3px;box-shadow:0 0 0 1px rgba(228,100,0,.12) inset;transition:transform 1.6s cubic-bezier(.22,.8,.25,1)}
+.bar-fill.big{background:linear-gradient(90deg,#192248 0%,#2d3a6e 70%,#E46400 100%)}
+.bar-row.investor .bar-fill{background:linear-gradient(90deg,#B8C0DD 0%,#7b83a8 100%)}
+.bar-val{font-family:var(--font-head);font-weight:600;font-size:13px;color:var(--ink);text-align:right;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.bar-row.arv .bar-val{font-weight:700;font-size:15px}
+.bar-foot{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:18px;border-top:1px solid var(--stroke);padding-top:16px;gap:10px}
+.bar-foot-k{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.bar-foot-v{font-family:var(--font-head);font-weight:700;font-size:24px;color:var(--ink);margin-top:4px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.bar-foot-v.primary{color:var(--primary)}
+.bar-foot-sub{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+@media (max-width:520px){ .bar-row{grid-template-columns:56px 1fr 64px;gap:10px} }
+
+/* ---------- Projects ---------- */
+.deals{display:grid;grid-template-columns:repeat(3, 1fr);gap:24px}
+@media (max-width:980px){ .deals{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:640px){ .deals{grid-template-columns:1fr} }
+.deal{
+  border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;
+  background:var(--bg-2);
+  display:flex;flex-direction:column;transition:transform .4s ease, box-shadow .3s, border-color .3s;
+}
+.deal:hover{transform:translateY(-4px);box-shadow:0 24px 50px rgba(25,34,72,.1);border-color:var(--accent-2)}
+.deal-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:#f0e9de}
+.deal-media .ba{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
+.deal-media .ba > div{position:relative;overflow:hidden}
+.deal-media .ba .label{
+  position:absolute;top:10px;left:10px;
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);
+  padding:4px 9px;background:rgba(255,255,255,.85);border-radius:999px;backdrop-filter:blur(6px);font-weight:600;
+}
+.deal-media .ba .after .label{background:var(--primary);color:#fff}
+.deal-media .divider{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,.5);transform:translateX(-0.5px)}
+.deal-body{padding:22px;display:flex;flex-direction:column;gap:14px}
+.deal-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.deal-top h3{font-family:var(--font-head);font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.deal-top .loc{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.deal-tag{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  padding:4px 9px;border-radius:999px;border:1px solid var(--stroke);color:var(--muted);white-space:nowrap;font-weight:600;
+}
+.deal-tag.closed{background:rgba(63,141,90,.12);color:var(--ok);border-color:rgba(63,141,90,.25)}
+.deal-tag.active{background:rgba(228,100,0,.1);color:var(--primary);border-color:rgba(228,100,0,.3)}
+.deal-tag.listing{background:var(--accent-3);color:var(--ink);border-color:var(--accent-2)}
+.deal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;padding-top:14px;border-top:1px solid var(--stroke)}
+.deal-grid .k{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.deal-grid .v{font-family:var(--font-head);font-weight:600;font-size:17px;color:var(--ink)}
+.deal-grid .profit .v{color:var(--primary)}
+.deal-bar{height:3px;background:var(--stroke-2);border-radius:2px;overflow:hidden;margin-top:8px}
+.deal-bar i{display:block;height:100%;background:linear-gradient(90deg, var(--primary), var(--accent-2))}
+.deal-foot{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding-top:8px;font-weight:500}
+
+/* Placeholder "photo" */
+.ph{position:absolute;inset:0;}
+.ph svg{position:absolute;inset:0;width:100%;height:100%}
+
+/* ---------- For investors ---------- */
+.invest{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+@media (max-width:900px){ .invest{grid-template-columns:1fr;gap:48px} }
+.invest h2{max-width:14ch}
+.invest-quote{font-family:var(--font-head);font-weight:500;font-size:28px;line-height:1.25;color:var(--ink);margin:36px 0 40px;max-width:22ch;letter-spacing:-.015em}
+.invest-quote::before{content:"“";color:var(--primary);margin-right:4px;font-size:42px;line-height:0;vertical-align:-.12em}
+
+.terms{border-top:1px solid var(--stroke)}
+.term-row{display:grid;grid-template-columns:180px 1fr;gap:20px;padding:22px 0;border-bottom:1px solid var(--stroke);align-items:baseline}
+.term-row dt{font-family:var(--font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:500}
+.term-row dd{margin:0;font-size:15px;color:var(--text)}
+.term-row dd em{font-family:var(--font-head);font-style:normal;font-weight:600;color:var(--primary);font-size:20px;margin-right:10px;letter-spacing:-.01em}
+
+/* ---------- About ---------- */
+.about{display:grid;grid-template-columns:.9fr 1.1fr;gap:80px}
+@media (max-width:900px){ .about{grid-template-columns:1fr;gap:48px} }
+.about .body{display:flex;flex-direction:column;gap:24px;max-width:60ch}
+.about p{font-size:17px;color:var(--text)}
+.about p b{color:var(--ink);font-weight:700}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px}
+.about-stats .s{border-top:1px solid var(--stroke);padding-top:16px}
+.about-stats .s .n{font-family:var(--font-head);font-weight:700;font-size:36px;color:var(--ink);letter-spacing:-.02em}
+.about-stats .s .l{font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:8px;display:block}
+
+/* ---------- Final CTA ---------- */
+.final{padding:180px 0 120px;text-align:center;position:relative}
+.final h2{font-size:clamp(40px,6vw,76px);line-height:1.04;letter-spacing:-.03em;max-width:14ch;margin:0 auto 40px;font-weight:700}
+.final h2 .line2{display:block;color:var(--primary)}
+.final .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.final-eyebrow{margin-bottom:28px;display:inline-flex}
+
+/* ---------- Footer ---------- */
+footer{border-top:1px solid var(--stroke);padding:56px 0 40px;margin-top:0;background:var(--bg);position:relative;z-index:2}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
+.foot .left{display:flex;align-items:center;gap:16px;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.foot .right{display:flex;gap:28px;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.foot a:hover{color:var(--primary)}
+.foot .left .fnf{color:var(--ink);font-family:var(--font-head);font-weight:700;font-size:14px;letter-spacing:-.01em;text-transform:none}
+.foot .left .fnf em{font-style:normal;color:var(--primary)}
+
+/* ---------- Tweaks panel ---------- */
+.tweaks{
+  position:fixed;right:22px;bottom:22px;z-index:200;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(16px);
+  border:1px solid var(--stroke);border-radius:14px;padding:16px 18px;
+  display:none;flex-direction:column;gap:12px;width:260px;
+  box-shadow:0 20px 60px rgba(25,34,72,.15);
+}
+.tweaks.open{display:flex}
+.tweaks h4{font-family:var(--font-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin:0 0 4px;font-weight:500}
+.tweaks .row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;color:var(--ink)}
+.tweaks .swatches{display:flex;gap:8px}
+.tweaks .sw{width:22px;height:22px;border-radius:50%;border:1px solid var(--stroke);cursor:pointer;transition:transform .15s}
+.tweaks .sw:hover{transform:scale(1.1)}
+.tweaks .sw.on{outline:2px solid var(--ink);outline-offset:2px}
+.tweaks input[type=range]{width:110px;accent-color:var(--primary)}
+
+.mono{font-family:var(--font-mono)}
+</style>
+</head>
+<body>
+
+<!-- ===== Background video (scroll-scrubbed, behind has-bg sections only) ===== -->
+<div class="bg-stage" aria-hidden="true">
+  <video id="bgvid" muted playsinline preload="auto" poster="" crossorigin="anonymous">
+    <source src="assets/bg-video.mp4?v=10" type="video/mp4">
+  </video>
+  <!-- animated fallback pattern shown when video fails or is pending -->
+  <div class="bg-fallback" id="bgFallback" aria-hidden="true"></div>
+</div>
+
+<!-- ===== Nav ===== -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="FnF Method — Home">
+      <span class="brand-mark" aria-hidden="true">
+        <img src="assets/fnf-logo.png" alt="FnF Method" />
+      </span>
+      <span class="brand-word sr-only" style="position:absolute;left:-9999px">FnF Method</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#how" data-i18n="nav.how">How it works</a>
+      <a href="#deals" data-i18n="nav.deals">Deals</a>
+      <a href="#investors" data-i18n="nav.investors">Investors</a>
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+
+    <div class="nav-right">
+      <div class="lang-switch" role="tablist" aria-label="Language">
+        <button data-lang="en" class="active" aria-pressed="true">EN</button>
+        <button data-lang="es" aria-pressed="false">ES</button>
+      </div>
+      <a class="cta ghost" href="/app" target="_blank" rel="noopener"><span data-i18n="nav.app">Launch app</span> <span class="arrow">↗</span></a>
+      <a class="cta primary" href="#contact" data-i18n="nav.cta">Request info <span class="arrow">↗</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Hero (video bg visible) ===== -->
+<section class="hero has-bg" id="top">
+  <div class="wrap">
+    <div class="hero-eyebrow-row reveal">
+      <span class="eyebrow" data-i18n="hero.eyebrow">Fix &amp; Flip — South Florida</span>
+      <span class="loc-pill"><span class="dot"></span><span data-i18n="hero.loc">Miami-Dade · Broward · Palm Beach</span></span>
+    </div>
+    <h1 class="reveal reveal-delay-1"><span data-i18n="hero.h1a">Your capital.</span> <span class="line2" data-i18n="hero.h1b">Deployed with precision.</span></h1>
+    <p class="sub reveal reveal-delay-2" data-i18n="hero.sub">We acquire, renovate, and exit residential properties in South Florida. You participate in the upside without managing the project.</p>
+    <div class="hero-ctas reveal reveal-delay-3">
+      <a class="cta primary" href="#deals"><span data-i18n="hero.cta1">View current deals</span> <span class="arrow">↗</span></a>
+      <a class="cta" href="#investors"><span data-i18n="hero.cta2">Become an investor</span></a>
+    </div>
+    <div class="hero-metrics reveal reveal-delay-3">
+      <div class="metric"><div class="num">8–12<sup>%</sup></div><span class="lbl" data-i18n="hero.m1">Annualized to GAP</span></div>
+      <div class="metric"><div class="num">6–9</div><span class="lbl" data-i18n="hero.m2">Months per cycle</span></div>
+      <div class="metric"><div class="num">$100K<sup>+</sup></div><span class="lbl" data-i18n="hero.m3">Minimum position</span></div>
+    </div>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true">
+    <span data-i18n="hero.scroll">Scroll</span>
+    <span class="line"></span>
+  </div>
+</section>
+
+<!-- ===== How it works (solid cream) ===== -->
+<section class="solid" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow reveal" data-i18n="how.eyebrow">Method</span>
+        <h2 class="title reveal reveal-delay-1" style="margin-top:18px"><span data-i18n="how.h2a">A disciplined</span> <span class="accent" data-i18n="how.h2b">four-step cycle.</span></h2>
+      </div>
+      <p class="lead reveal reveal-delay-2" data-i18n="how.lead">Each project follows the same playbook: underwriting, scope, execution, and exit. No creative financing, no open-ended timelines.</p>
+    </div>
+
+    <div class="steps reveal reveal-delay-1">
+      <div class="step"><span class="spark"></span>
+        <div class="idx">01 / ANALYSIS · 1–2 wks</div>
+        <h3 data-i18n="how.s1t">Analyze</h3>
+        <p data-i18n="how.s1p">ARV, comps, MAO and financing confirmed before we make an offer. We target single-family properties in Miami-Dade, Broward and Palm Beach acquired at a 25–30% discount to ARV.</p>
+      </div>
+      <div class="step"><span class="spark"></span>
+        <div class="idx">02 / CLOSING · 2–3 wks</div>
+        <h3 data-i18n="how.s2t">Close</h3>
+        <p data-i18n="how.s2p">HML covers 75–85% of purchase + 100% of rehab (~10% rate, 1.5–2.25% origination). GAP capital fills the remaining 15–25% of purchase, always documented with a lien on title.</p>
+      </div>
+      <div class="step"><span class="spark"></span>
+        <div class="idx">03 / REHAB · 3–4 mo</div>
+        <h3 data-i18n="how.s3t">Renovate</h3>
+        <p data-i18n="how.s3p">Fixed-bid scope, weekly site reports, and a capped contingency. Rehab budget and timeline are locked before funds are deployed.</p>
+      </div>
+      <div class="step"><span class="spark"></span>
+        <div class="idx">04 / EXIT · 1–2 mo</div>
+        <h3 data-i18n="how.s4t">Sell &amp; Distribute</h3>
+        <p data-i18n="how.s4p">Listed on MLS with a vetted agent network. At close: HML is repaid, GAP capital returns with 8–12% annualized, operator takes residual profit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Why it works (VIDEO BG VISIBLE, glass cards) ===== -->
+<section class="has-bg" id="why">
+  <div class="wrap why">
+    <div class="why-intro">
+      <span class="eyebrow reveal" data-i18n="why.eyebrow">Why it works</span>
+      <h2 class="reveal reveal-delay-1" style="margin-top:18px;max-width:14ch"><span data-i18n="why.h2a">Short cycles.</span> <span class="accent" data-i18n="why.h2b">Defined math.</span></h2>
+      <p class="reveal reveal-delay-2" style="margin-top:20px" data-i18n="why.lead">Fix &amp; flip isn’t speculative when the inputs are fixed. We enter at a known price, renovate on a controlled scope, and exit into a live comp set.</p>
+
+      <ul class="why-list reveal reveal-delay-2">
+        <li><span class="n">— 01</span><span class="t" data-i18n="why.l1">Short holding periods</span><span class="v">6–9 mo</span></li>
+        <li><span class="n">— 02</span><span class="t" data-i18n="why.l2">Entry discount to ARV</span><span class="v">25–30%</span></li>
+        <li><span class="n">— 03</span><span class="t" data-i18n="why.l3">Deal-level ROI</span><span class="v" data-i18n="why.l3v">35–50%</span></li>
+        <li><span class="n">— 04</span><span class="t" data-i18n="why.l4">Profit per deal</span><span class="v" data-i18n="why.l4v">$60K–$200K+</span></li>
+      </ul>
+    </div>
+
+    <aside class="glass reveal reveal-delay-3" aria-label="Deal economics">
+      <span class="eyebrow" data-i18n="why.asideEyebrow">Real example</span>
+      <h3><span data-i18n="why.asideTitle1">Purchase</span> <span class="accent">$585K</span> → <span data-i18n="why.asideTitle2">ARV</span> <span class="accent">$920K</span>.</h3>
+      <p class="sub" data-i18n="why.asideSub">Representative deal. Actual opportunities are presented individually with full underwriting and a lien on title as collateral.</p>
+
+      <div class="why-diagram" id="dealExample">
+        <div class="bar-row">
+          <div class="bar-label" data-i18n="why.bar.purchase">PURCHASE</div>
+          <div class="bar-track"><div class="bar-fill" data-target="75"></div></div>
+          <div class="bar-val" data-to="585" data-fmt="k">$0</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label" data-i18n="why.bar.rehab">REHAB</div>
+          <div class="bar-track"><div class="bar-fill" data-target="32"></div></div>
+          <div class="bar-val" data-to="75" data-fmt="k">$0</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">GAP</div>
+          <div class="bar-track"><div class="bar-fill" data-target="28"></div></div>
+          <div class="bar-val" data-to="237" data-fmt="k">$0</div>
+        </div>
+        <div class="bar-row investor">
+          <div class="bar-label" data-i18n="why.bar.investor">INVESTOR</div>
+          <div class="bar-track"><div class="bar-fill" data-target="10"></div></div>
+          <div class="bar-val" data-to="21" data-fmt="k">$0</div>
+        </div>
+        <div class="bar-row arv">
+          <div class="bar-label">ARV</div>
+          <div class="bar-track"><div class="bar-fill big" data-target="100"></div></div>
+          <div class="bar-val arv-v" data-to="920" data-fmt="k">$0</div>
+        </div>
+
+        <div class="bar-foot">
+          <div><div class="bar-foot-k" data-i18n="why.profit">Projected profit</div><div class="bar-foot-v primary" data-to="95" data-fmt="k">$0</div></div>
+          <div style="text-align:center"><div class="bar-foot-k" data-i18n="why.investorReturn">Investor return</div><div class="bar-foot-v" data-to="12" data-fmt="pct">0%</div><div class="bar-foot-sub" data-i18n="why.annualized">annualized</div></div>
+          <div style="text-align:right"><div class="bar-foot-k" data-i18n="why.timeline">Cycle</div><div class="bar-foot-v" data-to="9" data-fmt="mo">0 mo</div></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ===== Deals (solid white) ===== -->
+<section class="solid-white" id="deals">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow reveal" data-i18n="deals.eyebrow">Portfolio</span>
+        <h2 class="title reveal reveal-delay-1" style="margin-top:18px"><span data-i18n="deals.h2a">Recent</span> <span class="accent" data-i18n="deals.h2b">closed positions.</span></h2>
+      </div>
+      <p class="lead reveal reveal-delay-2" data-i18n="deals.lead">Each project is underwritten, executed, and closed under the same framework. Numbers shown are net of all project costs.</p>
+    </div>
+    <div class="deals" id="deals-grid"></div>
+  </div>
+</section>
+
+<!-- ===== For investors (VIDEO BG VISIBLE, glass) ===== -->
+<section class="has-bg" id="investors">
+  <div class="wrap invest">
+    <div>
+      <span class="eyebrow reveal" data-i18n="inv.eyebrow">For investors</span>
+      <h2 class="reveal reveal-delay-1" style="margin-top:18px"><span data-i18n="inv.h2a">Idle capital,</span> <span class="accent" data-i18n="inv.h2b">structured.</span></h2>
+      <blockquote class="invest-quote reveal reveal-delay-2" data-i18n="inv.quote">If you have capital sitting idle, we structure it into short-term real estate opportunities.</blockquote>
+      <a class="cta primary reveal reveal-delay-3" href="#contact"><span data-i18n="inv.cta">Request the investor deck</span> <span class="arrow">↗</span></a>
+    </div>
+
+    <div class="glass reveal reveal-delay-2">
+      <dl class="terms" style="margin:0">
+        <div class="term-row">
+          <dt data-i18n="inv.t1k">Minimum investment</dt>
+          <dd><em>$100K</em><span data-i18n="inv.t1v">per position, scalable allocations</span></dd>
+        </div>
+        <div class="term-row">
+          <dt data-i18n="inv.t2k">Deal duration</dt>
+          <dd><em>6 – 9 mo</em><span data-i18n="inv.t2v">target hold, capital returned at close</span></dd>
+        </div>
+        <div class="term-row">
+          <dt data-i18n="inv.t3k">Return structure</dt>
+          <dd><em>8–12% annualized</em><span data-i18n="inv.t3v">fixed interest or % of deal profit</span></dd>
+        </div>
+        <div class="term-row">
+          <dt data-i18n="inv.t4k">Legal structure</dt>
+          <dd><em>Promissory Note / JV</em><span data-i18n="inv.t4v">lien recorded on title as collateral</span></dd>
+        </div>
+        <div class="term-row" style="border-bottom:0">
+          <dt data-i18n="inv.t5k">Reporting</dt>
+          <dd><em data-i18n="inv.t5em">Monthly</em><span data-i18n="inv.t5v">site, budget &amp; timeline updates</span></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ===== About (solid cream) ===== -->
+<section class="solid" id="about">
+  <div class="wrap about">
+    <div>
+      <span class="eyebrow reveal" data-i18n="about.eyebrow">About</span>
+      <h2 class="reveal reveal-delay-1" style="margin-top:18px"><span data-i18n="about.h2a">Operators,</span> <span class="accent" data-i18n="about.h2b">not brokers.</span></h2>
+    </div>
+    <div class="body">
+      <p class="reveal" data-i18n="about.p1"><b>FnF Method</b> is a South Florida operating group focused on short-duration residential real estate. We source, renovate and exit properties on our own balance sheet.</p>
+      <p class="reveal reveal-delay-1" data-i18n="about.p2">We are not a fund, a brokerage, or a syndicate. We run projects. Capital partners participate on a per-deal basis, with full visibility on entry price, scope, and exit comps.</p>
+      <p class="reveal reveal-delay-2" data-i18n="about.p3">Every project runs on a 6–9 month cycle, with capital always secured by a lien on title. Profit is what drives the deal — not a pretty house.</p>
+
+      <div class="about-stats reveal reveal-delay-2">
+        <div class="s"><div class="n">$14.2M</div><span class="l" data-i18n="about.s1">Deployed</span></div>
+        <div class="s"><div class="n">23</div><span class="l" data-i18n="about.s2">Closed deals</span></div>
+        <div class="s"><div class="n">0</div><span class="l" data-i18n="about.s3">Capital losses</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Final CTA (VIDEO BG VISIBLE) ===== -->
+<section class="final has-bg" id="contact">
+  <div class="wrap">
+    <span class="eyebrow final-eyebrow reveal" data-i18n="final.eyebrow">Next steps</span>
+    <h2 class="reveal reveal-delay-1"><span data-i18n="final.h2a">Let’s put your capital</span> <span class="line2" data-i18n="final.h2b">to work.</span></h2>
+    <div class="ctas reveal reveal-delay-2">
+      <a class="cta primary" href="mailto:invest@fnfmethod.com"><span data-i18n="final.cta1">Request info</span> <span class="arrow">↗</span></a>
+      <a class="cta" href="#deals"><span data-i18n="final.cta2">View deals</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="left">
+      <span class="fnf">FnF <em>Method</em></span>
+      <span>· Miami, FL</span>
+    </div>
+    <div class="right">
+      <a href="mailto:invest@fnfmethod.com">invest@fnfmethod.com</a>
+      <a href="#top" data-i18n="foot.back">Back to top ↑</a>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:28px;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">
+    <span data-i18n="foot.disc">© 2026 FnF Method LLC. Illustrative figures. Not a solicitation. Past performance is not indicative of future returns.</span>
+  </div>
+</footer>
+
+<!-- ===== Tweaks panel ===== -->
+<div class="tweaks" id="tweaks">
+  <h4>Tweaks</h4>
+  <div class="row">
+    <span>Accent</span>
+    <div class="swatches" id="sw-accent">
+      <button class="sw on" data-accent="#E46400" style="background:#E46400"></button>
+      <button class="sw" data-accent="#FFA36E" style="background:#FFA36E"></button>
+      <button class="sw" data-accent="#192248" style="background:#192248"></button>
+    </div>
+  </div>
+  <div class="row">
+    <span>Video opacity</span>
+    <input id="tw-opacity" type="range" min="20" max="100" step="5" value="65"/>
+  </div>
+  <div class="row">
+    <span>Background</span>
+    <div class="swatches">
+      <button class="sw on" data-bg="#FBF6F1" style="background:#FBF6F1;border-color:#ccc"></button>
+      <button class="sw" data-bg="#FFFFFF" style="background:#FFFFFF;border-color:#ccc"></button>
+      <button class="sw" data-bg="#FCC8A7" style="background:#FCC8A7;border-color:#ccc"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ Tweak defaults ============ */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#E46400",
+  "videoOpacity": 80,
+  "bg": "#FBF6F1"
+}/*EDITMODE-END*/;
+
+const bgVideo = document.getElementById('bgvid');
+
+function applyTweaks(t){
+  const r = document.documentElement.style;
+  if(t.accent){ r.setProperty('--primary', t.accent); }
+  if(t.bg){ r.setProperty('--bg', t.bg); document.body.style.background = t.bg; }
+  if(typeof t.videoOpacity==='number'){ bgVideo.style.opacity = (t.videoOpacity/100).toString(); }
+}
+applyTweaks(TWEAK_DEFAULTS);
+
+/* ============ i18n ============ */
+const I18N = {
+  en: {
+    "nav.how":"How it works","nav.deals":"Deals","nav.investors":"Investors","nav.about":"About","nav.contact":"Contact","nav.cta":"Request info","nav.app":"Launch app",
+    "hero.eyebrow":"Fix & Flip — South Florida","hero.loc":"Miami-Dade · Broward · Palm Beach",
+    "hero.h1a":"Your capital.","hero.h1b":"Deployed with precision.",
+    "hero.sub":"We acquire, renovate, and exit residential properties in South Florida. You participate in the upside without managing the project.",
+    "hero.cta1":"View current deals","hero.cta2":"Become an investor",
+    "hero.m1":"Annualized to GAP","hero.m2":"Months per cycle","hero.m3":"Minimum position","hero.scroll":"Scroll",
+    "how.eyebrow":"Method","how.h2a":"A disciplined","how.h2b":"four-step cycle.",
+    "how.lead":"Each project follows the same playbook: underwriting, closing, execution, and exit. No creative financing, no open-ended timelines.",
+    "how.s1t":"Analyze","how.s1p":"ARV, comps, MAO and financing confirmed before we make an offer. We target single-family properties in Miami-Dade, Broward and Palm Beach acquired at a 25–30% discount to ARV.",
+    "how.s2t":"Close","how.s2p":"HML covers 75–85% of purchase + 100% of rehab (~10% rate, 1.5–2.25% origination). GAP capital fills the remaining 15–25% of purchase, always documented with a lien on title.",
+    "how.s3t":"Renovate","how.s3p":"Fixed-bid scope, weekly site reports, and a capped contingency. Rehab budget and timeline are locked before funds are deployed.",
+    "how.s4t":"Sell & Distribute","how.s4p":"Listed on MLS with a vetted agent network. At close: HML is repaid, GAP capital returns with 8–12% annualized, operator takes residual profit.",
+    "why.eyebrow":"Why it works","why.h2a":"Short cycles.","why.h2b":"Defined math.",
+    "why.lead":"Fix & flip isn’t speculative when the inputs are fixed. We enter at a known price, renovate on a controlled scope, and exit into a live comp set.",
+    "why.l1":"Short holding periods","why.l2":"Entry discount to ARV","why.l3":"Deal-level ROI","why.l3v":"35–50%","why.l4":"Profit per deal","why.l4v":"$60K–$200K+",
+    "why.asideEyebrow":"Real example","why.asideTitle1":"Purchase","why.asideTitle2":"ARV",
+    "why.asideSub":"Representative deal. Actual opportunities are presented individually with full underwriting and a lien on title as collateral.",
+    "why.bar.purchase":"PURCHASE","why.bar.rehab":"REHAB","why.bar.investor":"INVESTOR",
+    "why.profit":"Projected profit","why.timeline":"Cycle","why.investorReturn":"Investor return","why.annualized":"annualized","why.months":"mo",
+    "deals.eyebrow":"Portfolio","deals.h2a":"Recent","deals.h2b":"closed positions.",
+    "deals.lead":"Each project is underwritten, executed, and closed under the same framework. Numbers shown are net of all project costs.",
+    "inv.eyebrow":"For investors","inv.h2a":"Idle capital,","inv.h2b":"structured.",
+    "inv.quote":"If you have capital sitting idle, we structure it into short-term real estate opportunities.",
+    "inv.cta":"Request the investor deck",
+    "inv.t1k":"Minimum investment","inv.t1v":"per position, scalable allocations",
+    "inv.t2k":"Deal duration","inv.t2v":"target hold, capital returned at close",
+    "inv.t3k":"Return structure","inv.t3v":"fixed interest or % of deal profit",
+    "inv.t4k":"Legal structure","inv.t4v":"lien recorded on title as collateral",
+    "inv.t5k":"Reporting","inv.t5em":"Monthly","inv.t5v":"site, budget & timeline updates",
+    "about.eyebrow":"About","about.h2a":"Operators,","about.h2b":"not brokers.",
+    "about.p1":"<b>FnF Method</b> is a South Florida operating group focused on short-duration residential real estate. We source, renovate and exit properties on our own balance sheet.",
+    "about.p2":"We are not a fund, a brokerage, or a syndicate. We run projects. Capital partners participate on a per-deal basis, with full visibility on entry price, scope, and exit comps.",
+    "about.p3":"Every project runs on a 6–9 month cycle, with capital always secured by a lien on title. Profit is what drives the deal — not a pretty house.",
+    "about.s1":"Deployed","about.s2":"Closed deals","about.s3":"Capital losses",
+    "final.eyebrow":"Next steps","final.h2a":"Let’s put your capital","final.h2b":"to work.",
+    "final.cta1":"Request info","final.cta2":"View deals",
+    "foot.back":"Back to top ↑",
+    "foot.disc":"© 2026 FnF Method LLC. Illustrative figures. Not a solicitation. Past performance is not indicative of future returns.",
+    "deals.status.closed":"Closed","deals.status.active":"Active","deals.status.listing":"Listing",
+    "deals.k.purchase":"Purchase","deals.k.rehab":"Rehab","deals.k.sale":"Sale","deals.k.timeline":"Timeline","deals.k.profit":"Net profit",
+    "deals.ba.before":"Before","deals.ba.after":"After","deals.foot.id":"Deal"
+  },
+  es: {
+    "nav.how":"Cómo funciona","nav.deals":"Operaciones","nav.investors":"Inversores","nav.about":"Nosotros","nav.contact":"Contacto","nav.cta":"Solicitar info","nav.app":"Abrir app",
+    "hero.eyebrow":"Fix & Flip — Sur de Florida","hero.loc":"Miami-Dade · Broward · Palm Beach",
+    "hero.h1a":"Tu capital.","hero.h1b":"Desplegado con precisión.",
+    "hero.sub":"Adquirimos, renovamos y vendemos propiedades residenciales en el sur de Florida. Tú participas del upside sin gestionar el proyecto.",
+    "hero.cta1":"Ver operaciones","hero.cta2":"Convertirse en inversor",
+    "hero.m1":"Anualizado al GAP","hero.m2":"Meses por ciclo","hero.m3":"Posición mínima","hero.scroll":"Desliza",
+    "how.eyebrow":"Método","how.h2a":"Un ciclo","how.h2b":"disciplinado de cuatro pasos.",
+    "how.lead":"Cada proyecto sigue el mismo playbook: análisis, cierre, ejecución y salida. Sin financiación creativa, sin plazos abiertos.",
+    "how.s1t":"Analizar","how.s1p":"ARV, comps, MAO y financiación confirmados antes de ofertar. Buscamos unifamiliares en Miami-Dade, Broward y Palm Beach compradas con un descuento de 25–30% sobre el ARV.",
+    "how.s2t":"Cerrar","how.s2p":"El HML cubre 75–85% de la compra + 100% del rehab (~10% de tasa, 1.5–2.25% de origination). El GAP completa el 15–25% restante de la compra, siempre documentado con un lien sobre el título.",
+    "how.s3t":"Renovar","how.s3p":"Alcance a precio cerrado, reportes semanales y contingencia limitada. El presupuesto y el plazo se fijan antes de desplegar capital.",
+    "how.s4t":"Vender y distribuir","how.s4p":"Listado en MLS con una red de agentes seleccionados. Al cierre: se paga el HML, el GAP recupera capital con 8–12% anualizado, el operador toma el profit residual.",
+    "why.eyebrow":"Por qué funciona","why.h2a":"Ciclos cortos.","why.h2b":"Matemática clara.",
+    "why.lead":"Fix & flip deja de ser especulación cuando las variables son fijas. Entramos a un precio conocido, renovamos sobre un alcance controlado y salimos contra comps reales.",
+    "why.l1":"Plazos de tenencia cortos","why.l2":"Descuento de entrada vs ARV","why.l3":"ROI por operación","why.l3v":"35–50%","why.l4":"Profit por operación","why.l4v":"$60K–$200K+",
+    "why.asideEyebrow":"Ejemplo real","why.asideTitle1":"Compra","why.asideTitle2":"ARV",
+    "why.asideSub":"Operación representativa. Las oportunidades reales se presentan individualmente con análisis completo y lien sobre título como colateral.",
+    "why.bar.purchase":"COMPRA","why.bar.rehab":"REFORMA","why.bar.investor":"INVERSOR",
+    "why.profit":"Ganancia proyectada","why.timeline":"Ciclo","why.investorReturn":"Retorno inversor","why.annualized":"anualizado","why.months":"m",
+    "deals.eyebrow":"Portafolio","deals.h2a":"Posiciones","deals.h2b":"recientemente cerradas.",
+    "deals.lead":"Cada proyecto se analiza, ejecuta y cierra bajo el mismo marco. Las cifras son netas de todos los costos del proyecto.",
+    "inv.eyebrow":"Para inversores","inv.h2a":"Capital inactivo,","inv.h2b":"estructurado.",
+    "inv.quote":"Si tienes capital inactivo, lo estructuramos en oportunidades inmobiliarias de corto plazo.",
+    "inv.cta":"Solicitar el dossier del inversor",
+    "inv.t1k":"Inversión mínima","inv.t1v":"por posición, asignaciones escalables",
+    "inv.t2k":"Duración","inv.t2v":"plazo objetivo, capital devuelto al cierre",
+    "inv.t3k":"Estructura de retorno","inv.t3v":"interés fijo o % del profit del deal",
+    "inv.t4k":"Estructura legal","inv.t4v":"lien registrado sobre el título como colateral",
+    "inv.t5k":"Reporte","inv.t5em":"Mensual","inv.t5v":"obra, presupuesto y cronograma",
+    "about.eyebrow":"Nosotros","about.h2a":"Operadores,","about.h2b":"no brokers.",
+    "about.p1":"<b>FnF Method</b> es un grupo operador en el sur de Florida enfocado en inmuebles residenciales de corta duración. Originamos, renovamos y vendemos con balance propio.",
+    "about.p2":"No somos un fondo, una inmobiliaria ni un sindicato. Operamos proyectos. Los socios de capital participan por operación, con total visibilidad sobre precio de entrada, alcance y comps de salida.",
+    "about.p3":"Cada proyecto corre en un ciclo de 6–9 meses, con el capital siempre garantizado por un lien sobre el título. El profit es lo que manda — no una casa bonita.",
+    "about.s1":"Desplegado","about.s2":"Operaciones cerradas","about.s3":"Pérdidas de capital",
+    "final.eyebrow":"Siguiente paso","final.h2a":"Pongamos tu capital","final.h2b":"a trabajar.",
+    "final.cta1":"Solicitar info","final.cta2":"Ver operaciones",
+    "foot.back":"Volver arriba ↑",
+    "foot.disc":"© 2026 FnF Method LLC. Cifras ilustrativas. No constituye una oferta. El desempeño pasado no garantiza retornos futuros.",
+    "deals.status.closed":"Cerrada","deals.status.active":"Activa","deals.status.listing":"En venta",
+    "deals.k.purchase":"Compra","deals.k.rehab":"Reforma","deals.k.sale":"Venta","deals.k.timeline":"Plazo","deals.k.profit":"Beneficio neto",
+    "deals.ba.before":"Antes","deals.ba.after":"Después","deals.foot.id":"Operación"
+  }
+};
+
+let currentLang = localStorage.getItem('fnf-lang') || 'en';
+function t(key){ return (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key; }
+function setLang(lang){
+  currentLang = lang;
+  localStorage.setItem('fnf-lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.getAttribute('data-i18n');
+    const v = t(k);
+    if(v.includes('<')) el.innerHTML = v; else el.textContent = v;
+  });
+  document.querySelectorAll('.lang-switch button').forEach(b=>{
+    const on = b.dataset.lang === lang;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', String(on));
+  });
+  renderDeals();
+  refreshDealExampleLabels();
+}
+
+/* ============ Deals ============ */
+const DEALS = [
+  {id:"FNF-23", title:"Coral Gables Single Family", loc:"Coral Gables, FL", status:"closed",
+   purchase:"$720K", rehab:"$165K", sale:"$1.24M", timeline:"7 mo", profit:"+$185K", progress:100},
+  {id:"FNF-22", title:"Bay Harbor Single Family", loc:"Bay Harbor Islands, FL", status:"closed",
+   purchase:"$580K", rehab:"$140K", sale:"$980K", timeline:"6 mo", profit:"+$118K", progress:100},
+  {id:"FNF-21", title:"Coconut Grove Single Family", loc:"Coconut Grove, FL", status:"closed",
+   purchase:"$510K", rehab:"$125K", sale:"$885K", timeline:"8 mo", profit:"+$92K", progress:100},
+];
+
+function ph(type){
+  if(type==='before'){
+    return `<svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice">
+      <defs><linearGradient id="pbg${Math.random().toString(36).slice(2,7)}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e8ded0"/><stop offset="1" stop-color="#d4c5b0"/></linearGradient></defs>
+      <rect width="200" height="150" fill="#dccdb8"/>
+      <path d="M20 110 L100 55 L180 110 L180 135 L20 135 Z" fill="#b8a58a" stroke="#a08f75" stroke-width=".6"/>
+      <rect x="50" y="95" width="22" height="40" fill="#6b5d48"/>
+      <rect x="90" y="95" width="22" height="25" fill="#6b5d48"/>
+      <rect x="128" y="95" width="22" height="30" fill="#6b5d48"/>
+      <path d="M0 135 L200 135" stroke="#8b7a62" stroke-width=".8"/>
+      <circle cx="40" cy="35" r="18" fill="#eadfc9" opacity=".7"/>
+    </svg>`;
+  }
+  return `<svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice">
+      <defs><linearGradient id="pag${Math.random().toString(36).slice(2,7)}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FCC8A7"/><stop offset="1" stop-color="#FFA36E"/></linearGradient></defs>
+      <rect width="200" height="150" fill="url(#pag${Math.random().toString(36).slice(2,7)})" />
+      <rect width="200" height="150" fill="#FCC8A7"/>
+      <path d="M20 105 L100 50 L180 105 L180 135 L20 135 Z" fill="#fff" stroke="#192248" stroke-width=".6"/>
+      <rect x="50" y="92" width="22" height="43" fill="#E46400" opacity=".8"/>
+      <rect x="90" y="92" width="22" height="25" fill="#E46400" opacity=".9"/>
+      <rect x="128" y="92" width="22" height="30" fill="#E46400" opacity=".7"/>
+      <circle cx="160" cy="32" r="14" fill="#E46400" opacity=".3"/>
+    </svg>`;
+}
+
+function renderDeals(){
+  const grid = document.getElementById('deals-grid');
+  grid.innerHTML = DEALS.map((d,i)=>{
+    const statusLabel = t('deals.status.'+d.status);
+    return `
+    <article class="deal reveal" style="transition-delay:${i*0.05}s">
+      <div class="deal-media">
+        <div class="ba">
+          <div class="before"><div class="ph">${ph('before')}</div><span class="label">${t('deals.ba.before')}</span></div>
+          <div class="after"><div class="ph">${ph('after')}</div><span class="label">${t('deals.ba.after')}</span></div>
+        </div>
+        <span class="divider"></span>
+      </div>
+      <div class="deal-body">
+        <div class="deal-top">
+          <div>
+            <h3>${d.title}</h3>
+            <div class="loc">${d.loc}</div>
+          </div>
+          <span class="deal-tag ${d.status}">${statusLabel}</span>
+        </div>
+        <div class="deal-grid">
+          <div><span class="k">${t('deals.k.purchase')}</span><div class="v">${d.purchase}</div></div>
+          <div><span class="k">${t('deals.k.rehab')}</span><div class="v">${d.rehab}</div></div>
+          <div><span class="k">${t('deals.k.sale')}</span><div class="v">${d.sale}</div></div>
+          <div><span class="k">${t('deals.k.timeline')}</span><div class="v">${d.timeline}</div></div>
+          <div class="profit" style="grid-column:1 / -1"><span class="k">${t('deals.k.profit')}</span><div class="v">${d.profit}</div></div>
+        </div>
+        <div class="deal-bar"><i style="width:${d.progress}%"></i></div>
+        <div class="deal-foot"><span>${t('deals.foot.id')} · ${d.id}</span><span>↗</span></div>
+      </div>
+    </article>`;
+  }).join('');
+  observeReveals();
+}
+
+/* ============ Reveal observer ============ */
+let io;
+function observeReveals(){
+  if(io) io.disconnect();
+  io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0, rootMargin:"0px 0px -10% 0px"});
+  const els = document.querySelectorAll('.reveal:not(.in), .step:not(.in)');
+  els.forEach(el=>{
+    // If already in viewport at init, reveal immediately (failsafe, no transition)
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) {
+      el.classList.add('in-initial', 'in');
+    } else {
+      io.observe(el);
+    }
+  });
+}
+
+/* ============ Deal example animation ============ */
+function fmtVal(n, fmt){
+  n = Math.round(n);
+  if(fmt==='k') return '$' + n + 'K';
+  if(fmt==='pct') return n + '%';
+  if(fmt==='mo') return n + ' ' + (t('why.months') || 'mo');
+  return String(n);
+}
+function animateDealExample(root){
+  if(root.dataset.animated) return;
+  root.dataset.animated = '1';
+  // Fills
+  root.querySelectorAll('.bar-fill').forEach((fill, idx) => {
+    const target = parseFloat(fill.dataset.target) / 100;
+    setTimeout(() => {
+      fill.style.transform = 'scaleX(' + target + ')';
+    }, 120 + idx * 160);
+  });
+  // Counters
+  root.querySelectorAll('[data-to]').forEach((el, idx) => {
+    const to = parseFloat(el.dataset.to);
+    const fmt = el.dataset.fmt || 'k';
+    const delay = 120 + idx * 160;
+    const dur = 1500;
+    setTimeout(() => {
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min(1, (now - start) / dur);
+        // easeOutCubic
+        const e = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmtVal(to * e, fmt);
+        if(p < 1) requestAnimationFrame(tick);
+        else el.textContent = fmtVal(to, fmt);
+      }
+      requestAnimationFrame(tick);
+    }, delay);
+  });
+}
+function refreshDealExampleLabels(){
+  // When language changes, update the mo/pct labels without re-animating
+  const root = document.getElementById('dealExample');
+  if(!root || !root.dataset.animated) return;
+  root.querySelectorAll('[data-to]').forEach(el => {
+    const to = parseFloat(el.dataset.to);
+    const fmt = el.dataset.fmt || 'k';
+    el.textContent = fmtVal(to, fmt);
+  });
+}
+function observeDealExample(){
+  const root = document.getElementById('dealExample');
+  if(!root) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ animateDealExample(root); obs.unobserve(e.target); }
+    });
+  }, {threshold: 0.35});
+  obs.observe(root);
+}
+
+
+/* Load the entire video as a Blob so seeking is always supported,
+   regardless of whether the origin serves Range requests. */
+let videoDuration = 0, targetTime = 0, currentTime = 0, rafId = null, videoReady = false;
+const bgFallback = document.getElementById('bgFallback');
+// Start with video hidden; if it never loads, fallback stays visible
+bgVideo.classList.add('hidden');
+
+// Give the video 3.5s to load metadata. If it hasn't, keep using the CSS fallback and bail on scroll-scrub.
+const videoTimeout = setTimeout(()=>{
+  if (!videoReady) {
+    try { bgVideo.pause(); } catch(e){}
+    bgVideo.style.display = 'none';
+  }
+}, 3500);
+
+function markReady(){
+  if (videoReady) return;
+  videoDuration = bgVideo.duration || 0;
+  if (videoDuration > 0 && isFinite(videoDuration) && bgVideo.seekable && bgVideo.seekable.length && bgVideo.seekable.end(0) > 0) {
+    videoReady = true;
+    clearTimeout(videoTimeout);
+    bgVideo.classList.remove('hidden');
+    bgFallback.classList.add('hidden');
+    try { bgVideo.pause(); } catch(e){}
+    onScroll();
+  }
+}
+bgVideo.addEventListener('loadedmetadata', markReady);
+bgVideo.addEventListener('durationchange', markReady);
+bgVideo.addEventListener('canplay', ()=>{ try { bgVideo.pause(); } catch(e){} markReady(); });
+bgVideo.addEventListener('loadeddata', markReady);
+
+function scrollProgress(){
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  return Math.min(1, Math.max(0, window.scrollY / Math.max(1,max)));
+}
+function tickVideo(){
+  const diff = targetTime - currentTime;
+  if (Math.abs(diff) > 0.005) {
+    currentTime += diff * 0.22;
+    if (videoReady && videoDuration > 0 && isFinite(currentTime)) {
+      try {
+        const ct = Math.max(0, Math.min(videoDuration - 0.05, currentTime));
+        if (Math.abs(bgVideo.currentTime - ct) > 0.015) bgVideo.currentTime = ct;
+      } catch(e){}
+    }
+    rafId = requestAnimationFrame(tickVideo);
+  } else { rafId = null; }
+}
+function onScroll(){
+  const sy = window.scrollY;
+  document.getElementById('nav').classList.toggle('scrolled', sy > 40);
+  const p = scrollProgress();
+  if (videoReady && videoDuration > 0) {
+    targetTime = p * (videoDuration - 0.05);
+    if (rafId == null) rafId = requestAnimationFrame(tickVideo);
+  }
+  const ty = -p * window.innerHeight * 0.08;
+  const scale = 1.05 + p * 0.03;
+  if (videoReady) {
+    bgVideo.style.transform = `translate(-50%, calc(-50% + ${ty}px)) scale(${scale})`;
+  }
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+window.addEventListener('resize', onScroll);
+onScroll();
+
+/* ============ Lang ============ */
+document.querySelectorAll('.lang-switch button').forEach(b=>{
+  b.addEventListener('click', ()=> setLang(b.dataset.lang));
+});
+
+/* ============ Init ============ */
+renderDeals();
+setLang(currentLang);
+observeReveals();
+observeDealExample();
+
+/* ============ Tweaks edit-mode ============ */
+const tw = document.getElementById('tweaks');
+function setAccent(hex){
+  document.documentElement.style.setProperty('--primary', hex);
+  document.querySelectorAll('#sw-accent .sw').forEach(s=> s.classList.toggle('on', s.dataset.accent===hex));
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{accent:hex}}, '*');
+}
+function setBg(hex){
+  document.documentElement.style.setProperty('--bg', hex);
+  document.body.style.background = hex;
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{bg:hex}}, '*');
+}
+function setVidOpacity(v){
+  bgVideo.style.opacity = (v/100).toString();
+  window.parent.postMessage({type:'__edit_mode_set_keys', edits:{videoOpacity:Number(v)}}, '*');
+}
+document.querySelectorAll('#sw-accent .sw').forEach(b=> b.addEventListener('click', ()=> setAccent(b.dataset.accent)));
+document.querySelectorAll('.tweaks [data-bg]').forEach(b=> b.addEventListener('click', ()=>{
+  document.querySelectorAll('.tweaks [data-bg]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  setBg(b.dataset.bg);
+}));
+document.getElementById('tw-opacity').addEventListener('input', (e)=> setVidOpacity(e.target.value));
+
+window.addEventListener('message', (e)=>{
+  const d = e.data || {};
+  if(d.type === '__activate_edit_mode') tw.classList.add('open');
+  if(d.type === '__deactivate_edit_mode') tw.classList.remove('open');
+});
+window.parent.postMessage({type:'__edit_mode_available'}, '*');
+</script>
+</body>
+</html>
+
