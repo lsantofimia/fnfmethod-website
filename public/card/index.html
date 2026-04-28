@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0E0E10" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Luis Santofimia · FnF Method</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="card.jsx"></script>
+
+  <script type="text/babel">
+    const DATA = {
+      firstName:    "Luis",
+      lastName:     "Santofimia",
+      title:        "Founder",
+      company:      "FnF Method",
+      companyShort: "FnF",
+      tagline:      "Fix & Flip · South Florida\nTransformamos propiedades en oportunidades.",
+      phone:        "+1 (786) 676-8471",
+      email:        "lsantofimia@fnfmethod.com",
+      whatsapp:     "https://wa.me/+17866768471",
+      facebook:     "https://www.facebook.com/profile.php?id=61575736783426",
+      instagram:    "https://www.instagram.com/fnfmethod",
+      website:      "https://fnfmethod.com",
+      photoUrl:     "luis.png",
+    };
+
+    const THEME = {
+      mode:   "dark",
+      accent: "#e46400",
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(
+      React.createElement(Card, { data: DATA, theme: THEME })
+    );
+  </script>
+</body>
+</html>
