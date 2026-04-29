@@ -6,289 +6,295 @@
   <meta name="theme-color" content="#0E0E10" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Luis Santofimia · FnF Method</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Open+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body, #root { min-height: 100vh; }
+    .page { min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 0; }
+    .card-wrap { width: 100%; max-width: 440px; padding: 24px 16px 64px; }
+    @media (min-width: 600px) { .card-wrap { padding: 56px 24px; } }
+    .card { border: 1px solid; border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 30px 60px -30px rgba(0,0,0,0.25), 0 8px 20px -10px rgba(0,0,0,0.10); animation: cardIn 700ms cubic-bezier(0.2,0.8,0.2,1) both; }
+    @keyframes cardIn { from { opacity:0; transform:translateY(12px) scale(0.985); } to { opacity:1; transform:translateY(0) scale(1); } }
+    .hero { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; }
+    .hero-photo { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+    .hero-fade { position: absolute; inset: 0; pointer-events: none; }
+    .nfc-tag-float { position: absolute; top: 14px; right: 14px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; padding: 6px 10px; border-radius: 999px; background: rgba(0,0,0,0.35); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: #fff; border: 1px solid rgba(255,255,255,0.18); }
+    .identity { padding: 24px 26px 6px; text-align: center; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0; }
+    .eyebrow-dot { display: inline-block; width: 5px; height: 5px; border-radius: 999px; margin-right: 8px; flex-shrink: 0; }
+    .name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 8px; }
+    .tagline { font-size: 14.5px; line-height: 1.45; margin: 0 auto; max-width: 28ch; white-space: pre-line; }
+    .socials { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 22px 22px 6px; }
+    .bubble { display: flex; align-items: center; justify-content: center; padding: 16px 6px; border: 1px solid; border-radius: 18px; text-decoration: none; transition: transform 140ms ease; }
+    .bubble:hover { transform: translateY(-2px); }
+    .bubble-icon { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; }
+    .contact-list { list-style: none; margin: 18px 0 0; padding: 0 22px; display: flex; flex-direction: column; }
+    .contact-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 4px; border-bottom: 1px solid; }
+    .contact-row:last-child { border-bottom: 0; }
+    .contact-link { display: flex; align-items: center; gap: 14px; text-decoration: none; flex: 1; min-width: 0; }
+    .contact-icon { flex: none; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; background: rgba(255,255,255,0.06); }
+    .contact-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow: hidden; }
+    .contact-label { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; }
+    .contact-value { font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .copy-btn { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 10px; border-radius: 999px; border: 1px solid; background: transparent; cursor: pointer; transition: background 160ms ease; display: inline-flex; align-items: center; gap: 4px; }
+    .copy-btn:hover { background: rgba(255,255,255,0.06); }
+    .cta-wrap { padding: 22px 22px 18px; }
+    .cta { width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 18px 20px; border: 0; border-radius: 16px; font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.02em; text-transform: uppercase; cursor: pointer; transition: transform 140ms ease, background 240ms ease; }
+    .cta:hover { transform: translateY(-1px); }
+    .cta.saved { animation: pulseSaved 600ms ease; }
+    @keyframes pulseSaved { 0% { transform:scale(1); } 40% { transform:scale(1.02); } 100% { transform:scale(1); } }
+    .cta-icon { display: inline-flex; align-items: center; justify-content: center; }
+    .cta-help { margin: 12px 4px 0; text-align: center; font-size: 12.5px; line-height: 1.5; }
+    .cta-help code { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; padding: 1px 6px; border-radius: 4px; background: rgba(255,255,255,0.08); }
+    .card-footer { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 20px 18px; border-top: 1px solid; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; }
+    .dot-sep { opacity: 0.5; }
+    @media print { .page { background: #fff !important; } .card { box-shadow: none !important; } }
+  </style>
 </head>
 <body>
   <div id="root"></div>
-
   <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      var e = React.createElement;
+      var useState = React.useState;
 
-  <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
-
-    // ---------- vCard generation ----------
-    function buildVCard(d) {
-      const lines = [
-        "BEGIN:VCARD",
-        "VERSION:3.0",
-        `N:${d.lastName || ""};${d.firstName || ""};;;`,
-        `FN:${[d.firstName, d.lastName].filter(Boolean).join(" ")}`,
-        d.company ? `ORG:${d.company}` : "",
-        d.title ? `TITLE:${d.title}` : "",
-        d.phone ? `TEL;TYPE=CELL,VOICE:${d.phone}` : "",
-        d.email ? `EMAIL;TYPE=INTERNET:${d.email}` : "",
-        d.website ? `URL:${d.website}` : "",
-        d.instagram ? `X-SOCIALPROFILE;TYPE=instagram:${d.instagram}` : "",
-        d.facebook ? `X-SOCIALPROFILE;TYPE=facebook:${d.facebook}` : "",
-        d.whatsapp ? `IMPP;TYPE=whatsapp:${d.whatsapp}` : "",
-        d.note ? `NOTE:${d.note}` : "",
-        "END:VCARD",
-      ].filter(Boolean);
-      return lines.join("\r\n");
-    }
-
-    function downloadVCard(d) {
-      const vcard = buildVCard(d);
-      const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const fileName = `${(d.firstName || "contact").toLowerCase()}-${(d.lastName || "card").toLowerCase()}.vcf`;
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }
-
-    // ---------- Icons ----------
-    const Icon = {
-      WhatsApp: () => (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.04 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.889-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884zm8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-        </svg>
-      ),
-      Facebook: () => (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-        </svg>
-      ),
-      Instagram: () => (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-        </svg>
-      ),
-      Globe: () => (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="2" y1="12" x2="22" y2="12"/>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-        </svg>
-      ),
-      Phone: () => (
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-        </svg>
-      ),
-      Mail: () => (
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-          <polyline points="22,6 12,13 2,6"/>
-        </svg>
-      ),
-      Download: () => (
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-      ),
-      Check: () => (
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-      ),
-    };
-
-    // ---------- Card ----------
-    function Card({ data, theme }) {
-      const [saved, setSaved] = useState(false);
-      const [copied, setCopied] = useState(false);
-
-      const fullName = [data.firstName, data.lastName].filter(Boolean).join(" ");
-      const initials = (data.firstName?.[0] || "") + (data.lastName?.[0] || "");
-
-      const handleSave = () => {
-        downloadVCard(data);
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2400);
+      var DATA = {
+        firstName:    "Luis",
+        lastName:     "Santofimia",
+        title:        "Founder",
+        company:      "FnF Method",
+        tagline:      "Fix & Flip · South Florida\nTransformamos propiedades en oportunidades.",
+        phone:        "+1 (786) 676-8471",
+        email:        "lsantofimia@fnfmethod.com",
+        whatsapp:     "https://wa.me/+17866768471",
+        facebook:     "https://www.facebook.com/profile.php?id=61575736783426",
+        instagram:    "https://www.instagram.com/fnfmethod",
+        website:      "https://fnfmethod.com",
+        photoUrl:     "luis.png",
       };
+      var THEME = { mode: "dark", accent: "#e46400" };
 
-      const handleCopy = async (text) => {
-        try {
-          await navigator.clipboard.writeText(text);
-          setCopied(text);
-          setTimeout(() => setCopied(false), 1600);
-        } catch (e) {}
-      };
+      // ---- vCard ----
+      function buildVCard(d) {
+        return [
+          "BEGIN:VCARD", "VERSION:3.0",
+          "N:" + (d.lastName||"") + ";" + (d.firstName||"") + ";;;",
+          "FN:" + [d.firstName, d.lastName].filter(Boolean).join(" "),
+          d.company   ? "ORG:" + d.company                        : "",
+          d.title     ? "TITLE:" + d.title                        : "",
+          d.phone     ? "TEL;TYPE=CELL,VOICE:" + d.phone          : "",
+          d.email     ? "EMAIL;TYPE=INTERNET:" + d.email          : "",
+          d.website   ? "URL:" + d.website                        : "",
+          d.instagram ? "X-SOCIALPROFILE;TYPE=instagram:" + d.instagram : "",
+          d.facebook  ? "X-SOCIALPROFILE;TYPE=facebook:" + d.facebook   : "",
+          d.whatsapp  ? "IMPP;TYPE=whatsapp:" + d.whatsapp        : "",
+          "END:VCARD",
+        ].filter(Boolean).join("\r\n");
+      }
 
-      const isDark = theme.mode === "dark";
-      const bg = isDark ? "#0E0E10" : "#F6F4EF";
-      const surface = isDark ? "#17171B" : "#FFFFFF";
-      const text = isDark ? "#F2F0EB" : "#16161A";
-      const muted = isDark ? "#8A8A92" : "#6B6B72";
-      const hairline = isDark ? "rgba(255,255,255,0.08)" : "rgba(20,20,22,0.08)";
-      const accent = theme.accent;
+      function downloadVCard(d) {
+        var blob = new Blob([buildVCard(d)], { type: "text/vcard;charset=utf-8" });
+        var url  = URL.createObjectURL(blob);
+        var a    = document.createElement("a");
+        a.href = url;
+        a.download = (d.firstName||"contact").toLowerCase() + "-" + (d.lastName||"card").toLowerCase() + ".vcf";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+      }
 
-      const socials = [
-        data.whatsapp && { key: "whatsapp", label: "WhatsApp", href: data.whatsapp, Icon: Icon.WhatsApp, color: "#25D366" },
-        data.facebook && { key: "facebook", label: "Facebook", href: data.facebook, Icon: Icon.Facebook, color: "#1877F2" },
-        data.instagram && { key: "instagram", label: "Instagram", href: data.instagram.startsWith("http") ? data.instagram : `https://instagram.com/${data.instagram.replace(/^@/, "")}`, Icon: Icon.Instagram, color: "#E1306C" },
-        data.website && { key: "website", label: "Website", href: data.website, Icon: Icon.Globe, color: accent },
-      ].filter(Boolean);
+      // ---- SVG icons ----
+      function svgWA() {
+        return e("svg", { viewBox:"0 0 24 24", width:22, height:22, fill:"currentColor", "aria-hidden":"true" },
+          e("path", { d:"M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.04 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.889-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884zm8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" })
+        );
+      }
+      function svgFB() {
+        return e("svg", { viewBox:"0 0 24 24", width:22, height:22, fill:"currentColor", "aria-hidden":"true" },
+          e("path", { d:"M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" })
+        );
+      }
+      function svgIG() {
+        return e("svg", { viewBox:"0 0 24 24", width:22, height:22, fill:"currentColor", "aria-hidden":"true" },
+          e("path", { d:"M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" })
+        );
+      }
+      function svgGlobe() {
+        return e("svg", { viewBox:"0 0 24 24", width:22, height:22, fill:"none", stroke:"currentColor", strokeWidth:"2", strokeLinecap:"round", strokeLinejoin:"round", "aria-hidden":"true" },
+          e("circle", { cx:12, cy:12, r:10 }),
+          e("line", { x1:2, y1:12, x2:22, y2:12 }),
+          e("path", { d:"M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" })
+        );
+      }
+      function svgPhone() {
+        return e("svg", { viewBox:"0 0 24 24", width:20, height:20, fill:"none", stroke:"currentColor", strokeWidth:"2", strokeLinecap:"round", strokeLinejoin:"round", "aria-hidden":"true" },
+          e("path", { d:"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" })
+        );
+      }
+      function svgMail() {
+        return e("svg", { viewBox:"0 0 24 24", width:20, height:20, fill:"none", stroke:"currentColor", strokeWidth:"2", strokeLinecap:"round", strokeLinejoin:"round", "aria-hidden":"true" },
+          e("path", { d:"M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" }),
+          e("polyline", { points:"22,6 12,13 2,6" })
+        );
+      }
+      function svgDownload() {
+        return e("svg", { viewBox:"0 0 24 24", width:18, height:18, fill:"none", stroke:"currentColor", strokeWidth:"2.2", strokeLinecap:"round", strokeLinejoin:"round", "aria-hidden":"true" },
+          e("path", { d:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }),
+          e("polyline", { points:"7 10 12 15 17 10" }),
+          e("line", { x1:12, y1:15, x2:12, y2:3 })
+        );
+      }
+      function svgCheck() {
+        return e("svg", { viewBox:"0 0 24 24", width:18, height:18, fill:"none", stroke:"currentColor", strokeWidth:"2.6", strokeLinecap:"round", strokeLinejoin:"round", "aria-hidden":"true" },
+          e("polyline", { points:"20 6 9 17 4 12" })
+        );
+      }
+      function svgNFC() {
+        return e("svg", { width:12, height:12, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", strokeWidth:"2.4", strokeLinecap:"round" },
+          e("path", { d:"M2 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0" })
+        );
+      }
 
-      return (
-        <div className="page" style={{ background: bg, color: text }}>
-          <div className="card-wrap">
-            <article
-              className="card"
-              style={{
-                background: surface,
-                borderColor: hairline,
-                color: text,
-              }}
-            >
-              <div className="hero">
-                <div className="hero-photo">
-                  {data.photoUrl ? (
-                    <img src={data.photoUrl} alt={fullName} />
-                  ) : (
-                    <div className="photo-placeholder" style={{ background: isDark ? "#1F1F25" : "#E8E4DC", color: muted }}>
-                      <div className="initials" style={{ color: text }}>{initials || "L"}</div>
-                      <div className="ph-label">Foto Luis</div>
-                    </div>
-                  )}
-                </div>
-                <div className="nfc-tag-float">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
-                    <path d="M2 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/>
-                  </svg>
-                  <span>tap · nfc</span>
-                </div>
-                <div className="hero-fade" style={{ background: `linear-gradient(to bottom, transparent 0%, transparent 50%, ${surface} 100%)` }}></div>
-              </div>
+      // ---- Card component ----
+      function Card(props) {
+        var data    = props.data;
+        var theme   = props.theme;
+        var state   = useState(false); var saved    = state[0]; var setSaved  = state[1];
+        var state2  = useState(false); var copied   = state2[0]; var setCopied = state2[1];
 
-              <section className="identity">
-                <div className="eyebrow" style={{ color: accent }}>
-                  <span className="eyebrow-dot" style={{ background: accent }}></span>
-                  {data.title}
-                </div>
-                <h1 className="name">{fullName}</h1>
-                {data.tagline && (
-                  <p className="tagline" style={{ color: muted }}>{data.tagline}</p>
-                )}
-              </section>
+        var fullName = [data.firstName, data.lastName].filter(Boolean).join(" ");
+        var isDark   = theme.mode === "dark";
+        var bg       = isDark ? "#0E0E10" : "#F6F4EF";
+        var surface  = isDark ? "#17171B" : "#FFFFFF";
+        var text     = isDark ? "#F2F0EB" : "#16161A";
+        var muted    = isDark ? "#8A8A92" : "#6B6B72";
+        var hairline = isDark ? "rgba(255,255,255,0.08)" : "rgba(20,20,22,0.08)";
+        var accent   = theme.accent;
 
-              {socials.length > 0 && (
-                <nav className="socials" aria-label="Social links">
-                  {socials.map((s) => (
-                    <a
-                      key={s.key}
-                      href={s.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bubble"
-                      style={{ borderColor: hairline, color: text }}
-                      aria-label={s.label}
-                    >
-                      <span className="bubble-icon" style={{ color: s.color }}>
-                        <s.Icon />
-                      </span>
-                    </a>
-                  ))}
-                </nav>
-              )}
+        function handleSave() {
+          downloadVCard(data);
+          setSaved(true);
+          setTimeout(function(){ setSaved(false); }, 2400);
+        }
+        function handleCopy(val) {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(val).then(function(){
+              setCopied(val);
+              setTimeout(function(){ setCopied(false); }, 1600);
+            }).catch(function(){});
+          }
+        }
 
-              <ul className="contact-list">
-                {data.phone && (
-                  <li className="contact-row" style={{ borderColor: hairline }}>
-                    <a href={`tel:${data.phone}`} className="contact-link" style={{ color: text }}>
-                      <span className="contact-icon" style={{ color: muted }}><Icon.Phone /></span>
-                      <span className="contact-text">
-                        <span className="contact-label" style={{ color: muted }}>Teléfono</span>
-                        <span className="contact-value">{data.phone}</span>
-                      </span>
-                    </a>
-                    <button className="copy-btn" style={{ color: muted, borderColor: hairline }} onClick={() => handleCopy(data.phone)} aria-label="Copiar teléfono">
-                      {copied === data.phone ? <Icon.Check /> : "Copiar"}
-                    </button>
-                  </li>
-                )}
-                {data.email && (
-                  <li className="contact-row" style={{ borderColor: hairline }}>
-                    <a href={`mailto:${data.email}`} className="contact-link" style={{ color: text }}>
-                      <span className="contact-icon" style={{ color: muted }}><Icon.Mail /></span>
-                      <span className="contact-text">
-                        <span className="contact-label" style={{ color: muted }}>Email</span>
-                        <span className="contact-value">{data.email}</span>
-                      </span>
-                    </a>
-                    <button className="copy-btn" style={{ color: muted, borderColor: hairline }} onClick={() => handleCopy(data.email)} aria-label="Copiar email">
-                      {copied === data.email ? <Icon.Check /> : "Copiar"}
-                    </button>
-                  </li>
-                )}
-              </ul>
+        var socials = [
+          data.whatsapp  && { key:"whatsapp",  label:"WhatsApp", href:data.whatsapp,  icon:svgWA,    color:"#25D366" },
+          data.facebook  && { key:"facebook",  label:"Facebook",  href:data.facebook,  icon:svgFB,    color:"#1877F2" },
+          data.instagram && { key:"instagram", label:"Instagram", href:data.instagram.indexOf("http")===0 ? data.instagram : "https://instagram.com/"+data.instagram.replace(/^@/,""), icon:svgIG, color:"#E1306C" },
+          data.website   && { key:"website",   label:"Website",   href:data.website,   icon:svgGlobe, color:accent    },
+        ].filter(Boolean);
 
-              <div className="cta-wrap">
-                <button
-                  className={`cta ${saved ? "saved" : ""}`}
-                  onClick={handleSave}
-                  style={{
-                    background: saved ? "#16A34A" : accent,
-                    color: "#fff",
-                  }}
-                >
-                  <span className="cta-icon">
-                    {saved ? <Icon.Check /> : <Icon.Download />}
-                  </span>
-                  <span className="cta-label">
-                    {saved ? "Contacto guardado" : "Guardar contacto"}
-                  </span>
-                </button>
-                <p className="cta-help" style={{ color: muted }}>
-                  Se descargará un archivo <code>.vcf</code> que tu teléfono abrirá automáticamente.
-                </p>
-              </div>
+        return e("div", { className:"page", style:{ background:bg, color:text } },
+          e("div", { className:"card-wrap" },
+            e("article", { className:"card", style:{ background:surface, borderColor:hairline, color:text } },
 
-              <footer className="card-footer" style={{ color: muted, borderColor: hairline }}>
-                <span>© {new Date().getFullYear()} {data.company}</span>
-                <span className="dot-sep">·</span>
-                <span>Tarjeta digital</span>
-              </footer>
-            </article>
-          </div>
-        </div>
+              // Hero
+              e("div", { className:"hero" },
+                e("div", { className:"hero-photo" },
+                  data.photoUrl
+                    ? e("img", { src:data.photoUrl, alt:fullName })
+                    : e("div", { className:"photo-placeholder", style:{ background:isDark?"#1F1F25":"#E8E4DC", color:muted } },
+                        e("div", { className:"initials", style:{ color:text } },
+                          (data.firstName||"")[0] + (data.lastName||"")[0]))
+                ),
+                e("div", { className:"nfc-tag-float" }, svgNFC(), e("span", null, "tap · nfc")),
+                e("div", { className:"hero-fade", style:{ background:"linear-gradient(to bottom, transparent 0%, transparent 50%, "+surface+" 100%)" } })
+              ),
+
+              // Identity
+              e("section", { className:"identity" },
+                e("div", { className:"eyebrow", style:{ color:accent } },
+                  e("span", { className:"eyebrow-dot", style:{ background:accent } }),
+                  data.title
+                ),
+                e("h1", { className:"name" }, fullName),
+                data.tagline && e("p", { className:"tagline", style:{ color:muted } }, data.tagline)
+              ),
+
+              // Socials
+              socials.length > 0 && e("nav", { className:"socials", "aria-label":"Social links" },
+                socials.map(function(s){
+                  return e("a", { key:s.key, href:s.href, target:"_blank", rel:"noopener noreferrer",
+                                  className:"bubble", style:{ borderColor:hairline }, "aria-label":s.label },
+                    e("span", { className:"bubble-icon", style:{ color:s.color } }, s.icon())
+                  );
+                })
+              ),
+
+              // Contact list
+              e("ul", { className:"contact-list" },
+                data.phone && e("li", { className:"contact-row", style:{ borderColor:hairline } },
+                  e("a", { href:"tel:"+data.phone, className:"contact-link", style:{ color:text } },
+                    e("span", { className:"contact-icon", style:{ color:muted } }, svgPhone()),
+                    e("span", { className:"contact-text" },
+                      e("span", { className:"contact-label", style:{ color:muted } }, "Teléfono"),
+                      e("span", { className:"contact-value" }, data.phone)
+                    )
+                  ),
+                  e("button", { className:"copy-btn", style:{ color:muted, borderColor:hairline },
+                                onClick:function(){ handleCopy(data.phone); }, "aria-label":"Copiar teléfono" },
+                    copied === data.phone ? svgCheck() : "Copiar"
+                  )
+                ),
+                data.email && e("li", { className:"contact-row", style:{ borderColor:hairline } },
+                  e("a", { href:"mailto:"+data.email, className:"contact-link", style:{ color:text } },
+                    e("span", { className:"contact-icon", style:{ color:muted } }, svgMail()),
+                    e("span", { className:"contact-text" },
+                      e("span", { className:"contact-label", style:{ color:muted } }, "Email"),
+                      e("span", { className:"contact-value" }, data.email)
+                    )
+                  ),
+                  e("button", { className:"copy-btn", style:{ color:muted, borderColor:hairline },
+                                onClick:function(){ handleCopy(data.email); }, "aria-label":"Copiar email" },
+                    copied === data.email ? svgCheck() : "Copiar"
+                  )
+                )
+              ),
+
+              // CTA
+              e("div", { className:"cta-wrap" },
+                e("button", { className:"cta" + (saved?" saved":""), onClick:handleSave,
+                              style:{ background:saved?"#16A34A":accent, color:"#fff" } },
+                  e("span", { className:"cta-icon" }, saved ? svgCheck() : svgDownload()),
+                  e("span", { className:"cta-label" }, saved ? "Contacto guardado" : "Guardar contacto")
+                ),
+                e("p", { className:"cta-help", style:{ color:muted } },
+                  "Se descargará un archivo ",
+                  e("code", null, ".vcf"),
+                  " que tu teléfono abrirá automáticamente."
+                )
+              ),
+
+              // Footer
+              e("footer", { className:"card-footer", style:{ color:muted, borderColor:hairline } },
+                e("span", null, "© " + new Date().getFullYear() + " " + data.company),
+                e("span", { className:"dot-sep" }, "·"),
+                e("span", null, "Tarjeta digital")
+              )
+            )
+          )
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        React.createElement(Card, { data: DATA, theme: THEME })
       );
-    }
-
-    // ---------- Mount ----------
-    const DATA = {
-      firstName:    "Luis",
-      lastName:     "Santofimia",
-      title:        "Founder",
-      company:      "FnF Method",
-      companyShort: "FnF",
-      tagline:      "Fix & Flip · South Florida\nTransformamos propiedades en oportunidades.",
-      phone:        "+1 (786) 676-8471",
-      email:        "lsantofimia@fnfmethod.com",
-      whatsapp:     "https://wa.me/+17866768471",
-      facebook:     "https://www.facebook.com/profile.php?id=61575736783426",
-      instagram:    "https://www.instagram.com/fnfmethod",
-      website:      "https://fnfmethod.com",
-      photoUrl:     "luis.png",
-    };
-
-    const THEME = {
-      mode:   "dark",
-      accent: "#e46400",
-    };
-
-    ReactDOM.createRoot(document.getElementById("root")).render(
-      React.createElement(Card, { data: DATA, theme: THEME })
-    );
+    })();
   </script>
 </body>
 </html>
